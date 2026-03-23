@@ -1,0 +1,14 @@
+6219a18b32736b3aef3518f07b6b99df *DESCRIPTION
+8bfe42f7812f574092722357631bb26c *NAMESPACE
+e295e036588f744409b90683afed088b *R/DirichletForest-package.R
+06aaff1e3da693ab9bd33439d0bc4107 *R/RcppExports.R
+24d98d807ad909430a74d8c344ae6527 *R/dirichlet_forest.R
+d249b6a347fdde686b8eb1d3f78af443 *R/parallel_utils.R
+2032ba334876ee317f6096de66287217 *man/DirichletRF-package.Rd
+527e7a613136b2f8512013bfe415cee7 *man/DirichletRF.Rd
+902842470f07ff039491f1ed9404b906 *man/predict.dirichlet_forest.Rd
+911404b64a12d9733e8f924b11cc8785 *man/print.dirichlet_forest.Rd
+e2d347f9ad519d45dd6bcf3703472671 *src/Makevars
+e2d347f9ad519d45dd6bcf3703472671 *src/Makevars.win
+778902d312953ac08c87643d5d05f0a3 *src/RcppExports.cpp
+1bd7d01951dfa110dcf8c2ac38bfd1bf *src/dirichlet_forest.cpp
