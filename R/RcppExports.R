@@ -9,8 +9,8 @@ estimate_dirichlet_mle <- function(Y, max_iter = 10000L, tol = 1e-6, lambda = 1e
     .Call(`_DirichletRF_estimate_dirichlet_mle`, Y, max_iter, tol, lambda)
 }
 
-DirichletForest <- function(X, Y, B = 100L, d_max = 10L, n_min = 5L, m_try = -1L, seed = 123L, method = "mom", store_samples = FALSE, num_cores = 1L) {
-    .Call(`_DirichletRF_DirichletForest`, X, Y, B, d_max, n_min, m_try, seed, method, store_samples, num_cores)
+DirichletForest <- function(X, Y, B = 100L, d_max = 10L, n_min = 5L, m_try = -1L, seed = 123L, method = "mom", store_samples = FALSE, num_cores = 1L, replace = FALSE, sample_fraction = 1.0, compute_oob = FALSE) {
+    .Call(`_DirichletRF_DirichletForest`, X, Y, B, d_max, n_min, m_try, seed, method, store_samples, num_cores, replace, sample_fraction, compute_oob)
 }
 
 GetLeafPredictions <- function(forest_model, X_new) {
@@ -25,7 +25,19 @@ PredictDirichletForest <- function(forest_model, X_new, method = "mom", use_leaf
     .Call(`_DirichletRF_PredictDirichletForest`, forest_model, X_new, method, use_leaf_predictions)
 }
 
-GetSampleWeights <- function(forest_model, test_sample) {
-    .Call(`_DirichletRF_GetSampleWeights`, forest_model, test_sample)
+DrawConditionalSample <- function(forest_model, test_sample, size) {
+    .Call(`_DirichletRF_DrawConditionalSample`, forest_model, test_sample, size)
+}
+
+OOBWeightMatrix <- function(forest_model, X_train) {
+    .Call(`_DirichletRF_OOBWeightMatrix`, forest_model, X_train)
+}
+
+PredictWeights <- function(forest_model, X_new) {
+    .Call(`_DirichletRF_PredictWeights`, forest_model, X_new)
+}
+
+PermutationImportance <- function(forest_model, X, Y, loss = "aitchison", num_permutations = 5L, seed = 42L) {
+    .Call(`_DirichletRF_PermutationImportance`, forest_model, X, Y, loss, num_permutations, seed)
 }
 

@@ -36,8 +36,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // DirichletForest
-List DirichletForest(NumericMatrix X, NumericMatrix Y, int B, int d_max, int n_min, int m_try, int seed, std::string method, bool store_samples, int num_cores);
-RcppExport SEXP _DirichletRF_DirichletForest(SEXP XSEXP, SEXP YSEXP, SEXP BSEXP, SEXP d_maxSEXP, SEXP n_minSEXP, SEXP m_trySEXP, SEXP seedSEXP, SEXP methodSEXP, SEXP store_samplesSEXP, SEXP num_coresSEXP) {
+List DirichletForest(NumericMatrix X, NumericMatrix Y, int B, int d_max, int n_min, int m_try, int seed, std::string method, bool store_samples, int num_cores, bool replace, double sample_fraction, bool compute_oob);
+RcppExport SEXP _DirichletRF_DirichletForest(SEXP XSEXP, SEXP YSEXP, SEXP BSEXP, SEXP d_maxSEXP, SEXP n_minSEXP, SEXP m_trySEXP, SEXP seedSEXP, SEXP methodSEXP, SEXP store_samplesSEXP, SEXP num_coresSEXP, SEXP replaceSEXP, SEXP sample_fractionSEXP, SEXP compute_oobSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,7 +51,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< bool >::type store_samples(store_samplesSEXP);
     Rcpp::traits::input_parameter< int >::type num_cores(num_coresSEXP);
-    rcpp_result_gen = Rcpp::wrap(DirichletForest(X, Y, B, d_max, n_min, m_try, seed, method, store_samples, num_cores));
+    Rcpp::traits::input_parameter< bool >::type replace(replaceSEXP);
+    Rcpp::traits::input_parameter< double >::type sample_fraction(sample_fractionSEXP);
+    Rcpp::traits::input_parameter< bool >::type compute_oob(compute_oobSEXP);
+    rcpp_result_gen = Rcpp::wrap(DirichletForest(X, Y, B, d_max, n_min, m_try, seed, method, store_samples, num_cores, replace, sample_fraction, compute_oob));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -94,15 +97,56 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GetSampleWeights
-List GetSampleWeights(List forest_model, NumericVector test_sample);
-RcppExport SEXP _DirichletRF_GetSampleWeights(SEXP forest_modelSEXP, SEXP test_sampleSEXP) {
+// DrawConditionalSample
+NumericMatrix DrawConditionalSample(List forest_model, NumericVector test_sample, int size);
+RcppExport SEXP _DirichletRF_DrawConditionalSample(SEXP forest_modelSEXP, SEXP test_sampleSEXP, SEXP sizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type forest_model(forest_modelSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type test_sample(test_sampleSEXP);
-    rcpp_result_gen = Rcpp::wrap(GetSampleWeights(forest_model, test_sample));
+    Rcpp::traits::input_parameter< int >::type size(sizeSEXP);
+    rcpp_result_gen = Rcpp::wrap(DrawConditionalSample(forest_model, test_sample, size));
+    return rcpp_result_gen;
+END_RCPP
+}
+// OOBWeightMatrix
+NumericMatrix OOBWeightMatrix(List forest_model, NumericMatrix X_train);
+RcppExport SEXP _DirichletRF_OOBWeightMatrix(SEXP forest_modelSEXP, SEXP X_trainSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type forest_model(forest_modelSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X_train(X_trainSEXP);
+    rcpp_result_gen = Rcpp::wrap(OOBWeightMatrix(forest_model, X_train));
+    return rcpp_result_gen;
+END_RCPP
+}
+// PredictWeights
+NumericMatrix PredictWeights(List forest_model, NumericMatrix X_new);
+RcppExport SEXP _DirichletRF_PredictWeights(SEXP forest_modelSEXP, SEXP X_newSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type forest_model(forest_modelSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X_new(X_newSEXP);
+    rcpp_result_gen = Rcpp::wrap(PredictWeights(forest_model, X_new));
+    return rcpp_result_gen;
+END_RCPP
+}
+// PermutationImportance
+DataFrame PermutationImportance(List forest_model, NumericMatrix X, NumericMatrix Y, std::string loss, int num_permutations, int seed);
+RcppExport SEXP _DirichletRF_PermutationImportance(SEXP forest_modelSEXP, SEXP XSEXP, SEXP YSEXP, SEXP lossSEXP, SEXP num_permutationsSEXP, SEXP seedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type forest_model(forest_modelSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< std::string >::type loss(lossSEXP);
+    Rcpp::traits::input_parameter< int >::type num_permutations(num_permutationsSEXP);
+    Rcpp::traits::input_parameter< int >::type seed(seedSEXP);
+    rcpp_result_gen = Rcpp::wrap(PermutationImportance(forest_model, X, Y, loss, num_permutations, seed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -110,11 +154,14 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_DirichletRF_estimate_dirichlet_mom", (DL_FUNC) &_DirichletRF_estimate_dirichlet_mom, 1},
     {"_DirichletRF_estimate_dirichlet_mle", (DL_FUNC) &_DirichletRF_estimate_dirichlet_mle, 4},
-    {"_DirichletRF_DirichletForest", (DL_FUNC) &_DirichletRF_DirichletForest, 10},
+    {"_DirichletRF_DirichletForest", (DL_FUNC) &_DirichletRF_DirichletForest, 13},
     {"_DirichletRF_GetLeafPredictions", (DL_FUNC) &_DirichletRF_GetLeafPredictions, 2},
     {"_DirichletRF_PredictDirichletForestWeightBased", (DL_FUNC) &_DirichletRF_PredictDirichletForestWeightBased, 3},
     {"_DirichletRF_PredictDirichletForest", (DL_FUNC) &_DirichletRF_PredictDirichletForest, 4},
-    {"_DirichletRF_GetSampleWeights", (DL_FUNC) &_DirichletRF_GetSampleWeights, 2},
+    {"_DirichletRF_DrawConditionalSample", (DL_FUNC) &_DirichletRF_DrawConditionalSample, 3},
+    {"_DirichletRF_OOBWeightMatrix", (DL_FUNC) &_DirichletRF_OOBWeightMatrix, 2},
+    {"_DirichletRF_PredictWeights", (DL_FUNC) &_DirichletRF_PredictWeights, 2},
+    {"_DirichletRF_PermutationImportance", (DL_FUNC) &_DirichletRF_PermutationImportance, 6},
     {NULL, NULL, 0}
 };
 
